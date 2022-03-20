@@ -79,7 +79,7 @@ const PlaceOrderScreen = ({ history }) => {
       return;
     }
 
-    const { data } = await axiosInstance.post(`api/orders/orderCreate`);
+    const { data } = await axiosInstance.post(`api/orders/orderCreate`,{ totalPrice: cart.totalPrice});
 
     const options = {
       key: __DEV__ ? "rzp_test_xSuam6zt5xfqxe" : "rzp_test_xSuam6zt5xfqxe",
