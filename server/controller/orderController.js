@@ -29,7 +29,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
     throw new Error("No order items");
     return;
   } else {
-    let cartItems
+    let cartItems;
     const payment_capture = 1;
     const amount = req.body.totalPrice;
     const currency = "INR";
@@ -134,6 +134,26 @@ const updateOrderToDelivered = asyncHandler(async (req, res) => {
   } else {
     res.status(404);
     throw new Error("Order not found");
+  }
+});
+
+const OrderSave = asyncHandler(async (req, res) => {
+  try {
+    const order = new Order({
+      orderItems,
+      user: req.user._id,
+      shippingAddress,
+      paymentMethod,
+      itemsPrice,
+      taxPrice,
+      shippingPrice,
+      totalPrice,
+    });
+
+    const createdOrder = await order.save();
+    res.status(200).json(createdOrder);
+  } catch (err) {
+    throw new Error(err.message);
   }
 });
 

@@ -94,9 +94,10 @@ const PlaceOrderScreen = ({ history }) => {
         ) {
           toast.success("Order sucessfully not placed");
         
-          history.push(`/order/${data?.id}`);
         } else {
           toast.success("Order sucessfully  placed");
+          
+          history.push(`/order/${data?.id}`);
         }
         // location.href = redirect_url;
       },
