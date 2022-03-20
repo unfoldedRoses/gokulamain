@@ -1,0 +1,30 @@
+.category{
+    display: flex;
+  
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;/* Hide vertical scrollbar */
+    overflow-x: scroll;
+   
+}
+
+.category::-webkit-scrollbar {
+    display: none;
+}
+
+
+
+
+.category_item{
+    margin-right: 10px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    width: 150px !important;
+}
+
+.categoryH1{
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
