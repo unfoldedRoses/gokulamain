@@ -31,7 +31,7 @@ const addOrderItems = asyncHandler(async (req, res) => {
   } else {
     let cartItems
     const payment_capture = 1;
-    const amount = req.body.totalPrice*100;
+    const amount = req.body.totalPrice;
     const currency = "INR";
 
     const options = {
