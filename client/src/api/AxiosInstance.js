@@ -11,12 +11,11 @@ let axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   async function (config) {
     const userInfo = localStorage.getItem("userInfo");
+    let token=userInfo !== null || userInfo !== undefined ? JSON.parse(userInfo)?.token : null;
     if (userInfo !== null || userInfo !== undefined) {
-      config.headers.Authorization = `Bearer ${JSON.parse(userInfo).token}`;
+      config.headers.Authorization = `Bearer ${token}`;
     }
-    // if (token !== null || token !== undefined) {
-    //   config.headers["Authorization"] = `Bearer ${token !== null ? JSON.parse(token).token : ""} `;
-    // }
+   
     return config;
   },
   function (err) {
