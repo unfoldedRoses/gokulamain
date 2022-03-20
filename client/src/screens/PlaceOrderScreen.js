@@ -82,7 +82,7 @@ const PlaceOrderScreen = ({ history }) => {
     const { data } = await axiosInstance.post(`api/orders/orderCreate`);
 
     const options = {
-      key: __DEV__ ? "rzp_test_xSuam6zt5xfqxe" : "PRODUCTION_KEY",
+      key: __DEV__ ? "rzp_test_xSuam6zt5xfqxe" : "rzp_test_xSuam6zt5xfqxe",
       currency: data?.currency,
       amount: data?.amount.toString(),
       order_id: data?.id,
