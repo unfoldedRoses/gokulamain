@@ -96,8 +96,18 @@ const PlaceOrderScreen = ({ history }) => {
         
         } else {
           toast.success("Order sucessfully  placed");
-          
-          history.push(`/order/${data?.id}`);
+          // let order={
+          //   shippingAddress: cart.shippingAddress,
+          //   paymentMethod: cart.paymentMethod,
+          //   items: cart.cartItems,
+          //   orderId: data?.id,
+          //   totalPrice: cart.totalPrice,
+          //   razorpayPaymentId: response.razorpay_payment_id,
+          //   razorpaySignature: response.razorpay_payment_id,
+          //   razorpayOrderId: response.razorpay_order_id,
+
+          // }
+          // history.push(`/order/${data?.id}`);
         }
         // location.href = redirect_url;
       },
