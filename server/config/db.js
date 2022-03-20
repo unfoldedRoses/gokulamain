@@ -1,19 +1,22 @@
-import mongoose from 'mongoose'
-import dotenv from 'dotenv'
-dotenv.config()
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+dotenv.config();
+
 const connectDB = async () => {
   try {
-    
-    const conn = await mongoose.connect("mongodb+srv://praveendb009:worldatpeace123456@cluster0.skmqw.mongodb.net/gokuladb", {
-      useUnifiedTopology: true,
-      useNewUrlParser: true,
-      useCreateIndex: true,
-    })
-    console.log(`mongodb connected: ${conn.connection.host}`)
+    const conn = await mongoose.connect(
+      "mongodb+srv://praveendb009:worldatpeace123456@cluster0.skmqw.mongodb.net/gokuladb",
+      {
+        useUnifiedTopology: true,
+        useNewUrlParser: true,
+        useCreateIndex: true,
+      }
+    );
+    console.log(`mongodb connected: ${conn.connection.host}`);
   } catch (error) {
-    console.error(`Error: ${error.message}`)
-    process.exit(1)
+    console.error(`Error: ${error.message}`);
+    process.exit(1);
   }
-}
+};
 
 export default connectDB;
