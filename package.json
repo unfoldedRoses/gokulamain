@@ -15,14 +15,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/acharnabin/gokula-deploy.git"
+    "url": "git+https://github.com/unfoldedRoses/gokulamain.git"
   },
   "author": "Shahnewaz",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/acharnabin/gokula-deploy/issues"
+    "url": "https://github.com/unfoldedRoses/gokulamain/issues"
   },
-  "homepage": "https://github.com/acharnabin/gokula-deploy#readme",
+  "homepage": "https://github.com/unfoldedRoses/gokulamain#readme",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.2",
