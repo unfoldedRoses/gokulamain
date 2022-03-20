@@ -5853,7 +5853,7 @@ const Terms = () => {
               >
                 <strong>
                   <span style={{ fontSize: "15px", color: "rgb(89, 89, 89)" }}>
-                    Phone:
+                    Email:
                   </span>
                   &nbsp;
                 </strong>
@@ -5866,7 +5866,7 @@ const Terms = () => {
                           data-id="dd6f266f-438b-bfdc-9204-0b17e109e270"
                           data-type="question"
                         >
-                          __________
+                          gokulaorganics@gmail.com
                         </bdt>
                       </span>
                     </span>
