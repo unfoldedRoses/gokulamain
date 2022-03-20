@@ -8,10 +8,11 @@ const Footer = () => {
         <Row className="mx-md-5 px-md-5">
           <Col md={4}>
             <h3>Gokula Organic Shop</h3>
-            <p className="text-justify">
+            <p className="">
               Plot No.38, SCNO.40, Kuvempu Nagar,,Hanuman Nagar, Stage 1,
-              Belagavi,Karnata ka,Belgaum,Belgaum,Karnataka,590019,India
-              Belgaum, karnataka 590019, India Email: gokulaorganics@gmail.com
+              Belagavi,Karnataka
+              <br/>
+              Email: gokulaorganics@gmail.com
             </p>
           </Col>
           <Col md={3}>
