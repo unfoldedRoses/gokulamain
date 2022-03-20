@@ -4,7 +4,7 @@ import styles from "./HeroSection.module.css";
 
 const HeroSection = () => {
   return (
-    <div className="mx-md-5 px-md-5">
+    <div className="mx-md-5 mt-5 px-md-5">
       <Row className="d-flex align-items-center">
         <Col md={6}>
           <h1 className="text-capitalize font-weight-bold">
