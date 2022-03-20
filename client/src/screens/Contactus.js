@@ -118,7 +118,7 @@ const Contactus = ({ location, history }) => {
             <Button
               type="submit"
               variant="primary"
-              className="rounded login_btn text-capitalize"
+              className="rounded login_btn "
             >
               Contact us
             </Button>
