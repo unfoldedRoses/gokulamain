@@ -71,7 +71,7 @@ const Footer = () => {
         <Row>
           <Col className="text-center pt-3 mt-5">
             Copyright &copy; Gokula Organic Shop <br />
-            Shahnewaz Tameem All rights reserved
+           
           </Col>
         </Row>
       </Container>

@@ -43,7 +43,7 @@ const Header = () => {
             <span className='navbar-toggler-icon text-danger'></span>
           </Navbar.Toggle>
           <Navbar.Collapse id='basic-navbar-nav'>
-            <Route render={({ history }) => <SearchBox history={history} />} />
+            {/* <Route render={({ history }) => <SearchBox history={history} />} /> */}
             <Nav className='ml-auto'>
               <LinkContainer to='/cart'>
                 <Nav.Link className='mr-3'>
