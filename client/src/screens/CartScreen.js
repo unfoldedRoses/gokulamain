@@ -50,7 +50,7 @@ const CartScreen = ({ match, location, history }) => {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.6 }}
     >
-      <div className='mx-5 px-5'>
+      <div className='mx-md-5 px-md-5'>
         <Row>
           {cartItems.length === 0 ? (
             <Col md={12} className='text-center'>

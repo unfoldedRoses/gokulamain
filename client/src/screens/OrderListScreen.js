@@ -29,7 +29,7 @@ const OrderListScreen = ({ history }) => {
   }, [dispatch, history, userInfo])
 
   return (
-    <div className='mx-5 px-5'>
+    <div className='mx-md-5 px-md-5'>
       <h1>Orders</h1>
       {loading ? (
         <Loader />
