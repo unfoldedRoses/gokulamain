@@ -1,8 +1,10 @@
 import mongoose from 'mongoose'
-
+import dotenv from 'dotenv'
+dotenv.config()
 const connectDB = async () => {
   try {
-    const conn = await mongoose.connect("mongodb://localhost/mydb", {
+    
+    const conn = await mongoose.connect("mongodb+srv://praveendb009:worldatpeace123456@cluster0.skmqw.mongodb.net/test", {
       useUnifiedTopology: true,
       useNewUrlParser: true,
       useCreateIndex: true,
