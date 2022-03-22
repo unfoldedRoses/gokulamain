@@ -1,6 +1,6 @@
 import asyncHandler from "express-async-handler";
 import Order from "../models/orderModel.js";
-
+import cartModal from "../models/cartModal.js";
 import Razorpay from "razorpay";
 
 // This razorpayInstance will be used to
@@ -157,6 +157,57 @@ const OrderSave = asyncHandler(async (req, res) => {
   }
 });
 
+// order with cod
+const placeOrderCod = asyncHandler(async (req, res) => {
+  const { shippingAddress, paymentMethod } = req.body;
+  try {
+    const cartItems = await cartModal
+      .find({ user: req.user._id })
+      .populate("product");
+
+    //calculate total price mongo db
+    let totalPrice = 0;
+
+    const orderItems = cartItems.map((cartItem) => {
+      totalPrice += cartItem.quantity * cartItem.product.price;
+      return {
+        name: cartItem?.product.name,
+        qty: cartItem?.quantity,
+        price: cartItem?.product?.price,
+        product: cartItem?.product?._id,
+      };
+    });
+
+    const order = new Order({
+      orderItems,
+      user: req.user._id,
+      shippingAddress,
+      paymentMethod,
+      taxPrice: 0,
+      shippingPrice: 0,
+      totalPrice,
+    });
+
+    const createdOrder = await order.save();
+
+    //remove cart items
+    await cartModal.deleteMany({ user: req.user._id });
+    if (createdOrder) {
+      res.status(200).json({
+        data: createdOrder,
+        message: "Order placed successfully",
+      });
+    } else {
+      res.status(201).json({
+        message: "Something went wrong",
+      });
+    }
+  } catch (e) {
+    console.log(e);
+    res.status(400).json({ message: e.message });
+  }
+});
+
 export {
   addOrderItems,
   getOrderById,
@@ -165,4 +216,5 @@ export {
   getOrders,
   updateOrderToPending,
   updateOrderToDelivered,
+  placeOrderCod,
 };

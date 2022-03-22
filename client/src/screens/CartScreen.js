@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect } from "react";
 import {
   Button,
   Card,
@@ -8,40 +8,49 @@ import {
   InputGroup,
   ListGroup,
   Row,
-} from 'react-bootstrap'
-import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
-
-import { addToCart, removeFromCart } from '../actions/cartActions'
-import Message from '../components/Message'
-import emptyCart from '../assets/empty-cart.png'
-import crossIcon from '../assets/icons/cross.svg'
-import { motion } from 'framer-motion'
-import { baseURL } from '../api/AxiosInstance'
+} from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import { addToCart, removeFromCart } from "../actions/cartActions";
+import Message from "../components/Message";
+import emptyCart from "../assets/empty-cart.png";
+import crossIcon from "../assets/icons/cross.svg";
+import { motion } from "framer-motion";
+import axiosInstance, { baseURL } from "../api/AxiosInstance";
+import { CART_ADD_ITEM } from "../constants/cartConstants";
 
 const CartScreen = ({ match, location, history }) => {
-  const productId = match.params.id
-  const qty = location.search ? Number(location.search.split('=')[1]) : 1
+  const productId = match.params.id;
+  const qty = location.search ? Number(location.search.split("=")[1]) : 1;
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
-  const cart = useSelector((state) => state.cart)
-  const { cartItems } = cart
-  console.log(cartItems)
+  const cart = useSelector((state) => state.cart);
+  const { cartItems } = cart;
+
   useEffect(() => {
-    window.scrollTo(0, 0)
-    if (productId) {
-      dispatch(addToCart(productId, qty))
-    }
-  }, [dispatch, productId, qty])
+    window.scrollTo(0, 0);
+    // if (productId) {
+    //   dispatch(addToCart(productId, qty))
+    // }
+  }, []);
 
-  const removeFromCartHandler = (id) => {
-    dispatch(removeFromCart(id))
-  }
+  const removeFromCartHandler = async (data) => {
+    
+    const res = await axiosInstance.post("/api/products/deleteCart", {id:data});
+    console.log(res);
+    if (res.status === 200) {
+      dispatch(removeFromCart(data));
+      toast.success("Item removed from cart");
+    } else {
+      toast.error("Something went wrong");
+    }
+  };
 
   const checkoutHandler = () => {
-    history.push('/login?redirect=shipping')
-  }
+    history.push("/login?redirect=shipping");
+  };
 
   return (
     <motion.div
@@ -50,43 +59,43 @@ const CartScreen = ({ match, location, history }) => {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.6 }}
     >
-      <div className='mx-md-5 px-md-5'>
+      <div className="mx-md-5 px-md-5">
         <Row>
           {cartItems.length === 0 ? (
-            <Col md={12} className='text-center'>
+            <Col md={12} className="text-center">
               <Image src={emptyCart} fluid />
             </Col>
           ) : (
             <Col md={8}>
-              <h1 className='pt-0'>Shopping Cart</h1>
-              <ListGroup variant='flush'>
+              <h1 className="pt-0">Shopping Cart</h1>
+              <ListGroup variant="flush">
                 {cartItems.map((item) => (
-                  <ListGroup.Item key={item.product} className='pl-0'>
-                    <Row className='align-items-center'>
+                  <ListGroup.Item key={item.product} className="pl-0">
+                    <Row className="align-items-center">
                       <Col md={2}>
                         <Image
-                           src={`${baseURL}/${item?.image}`}
+                          src={`${baseURL}/${item?.product?.image}`}
                           alt={item.name}
                           fluid
                           style={{
-                            height: '160px',
-                            width: '160px',
-                            borderRadius: '50%',
+                            height: "160px",
+                            width: "160px",
+                            borderRadius: "50%",
                           }}
                         />
                       </Col>
                       <Col md={3}>
                         <Link to={`/product/${item.product}`}>
-                          <h4>{item.name}</h4>
+                          <h4>{item?.product?.name}</h4>
                         </Link>
                       </Col>
                       <Col md={2}>
-                        <h4>₹{item.price}</h4>
+                        <h4>₹{item?.product?.price}</h4>
                       </Col>
                       <Col md={2}>
                         <Form.Control
-                          as='select'
-                          value={item.qty}
+                          as="select"
+                          value={item?.quantity}
                           onChange={(e) =>
                             dispatch(
                               addToCart(item.product, Number(e.target.value))
@@ -102,14 +111,14 @@ const CartScreen = ({ match, location, history }) => {
                       </Col>
                       <Col md={2}>
                         <Button
-                          type='button'
-                          variant='light'
-                          onClick={() => removeFromCartHandler(item.product)}
+                          type="button"
+                          variant="light"
+                          onClick={() => removeFromCartHandler(item?._id)}
                         >
                           <Image
                             src={crossIcon}
                             fluid
-                            style={{ width: '40px' }}
+                            style={{ width: "40px" }}
                           />
                         </Button>
                       </Col>
@@ -123,24 +132,24 @@ const CartScreen = ({ match, location, history }) => {
           {cartItems.length !== 0 && (
             <Col md={3}>
               <Card>
-                <ListGroup variant='flush'>
+                <ListGroup variant="flush">
                   <ListGroup.Item>
                     <h2>
                       Subtotal (
-                      {cartItems.reduce((acc, item) => acc + item.qty, 0)})
+                      {cartItems.reduce((acc, item) => acc + item?.quantity, 0)})
                       items
-                    </h2>{' '}
+                    </h2>{" "}
                     <h4>
-                      ${' '}
+                      ${" "}
                       {cartItems
-                        .reduce((acc, item) => acc + item.qty * item.price, 0)
+                        .reduce((acc, item) => acc + item?.quantity * item?.product?.price, 0)
                         .toFixed(2)}
                     </h4>
                   </ListGroup.Item>
                   <ListGroup.Item>
                     <Button
-                      type='button'
-                      className='btn-block'
+                      type="button"
+                      className="btn-block"
                       disabled={cartItems.length === 0}
                       onClick={checkoutHandler}
                     >
@@ -154,7 +163,7 @@ const CartScreen = ({ match, location, history }) => {
         </Row>
       </div>
     </motion.div>
-  )
-}
+  );
+};
 
-export default CartScreen
+export default CartScreen;

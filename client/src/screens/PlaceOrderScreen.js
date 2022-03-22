@@ -79,7 +79,9 @@ const PlaceOrderScreen = ({ history }) => {
       return;
     }
 
-    const { data } = await axiosInstance.post(`api/orders/orderCreate`,{ totalPrice: cart.totalPrice});
+    const { data } = await axiosInstance.post(`api/orders/orderCreate`, {
+      totalPrice: cart.totalPrice,
+    });
 
     const options = {
       key: __DEV__ ? "rzp_test_xSuam6zt5xfqxe" : "rzp_test_xSuam6zt5xfqxe",
@@ -93,7 +95,6 @@ const PlaceOrderScreen = ({ history }) => {
           response.razorpay_payment_id < 1
         ) {
           toast.success("Order sucessfully not placed");
-        
         } else {
           toast.success("Order sucessfully  placed");
           // let order={
@@ -118,6 +119,40 @@ const PlaceOrderScreen = ({ history }) => {
     };
     const paymentObject = new window.Razorpay(options);
     paymentObject.open();
+  };
+
+  const handlePlaceOrder = async () => {
+    try {
+      let res;
+      if (cart.cartItems.length === 0) {
+        toast.error("Cart is empty");
+        return;
+      }
+
+      let options = {
+        shippingAddress: cart.shippingAddress,
+        paymentMethod: cart.paymentMethod,
+      };
+
+      if (cart.paymentMethod.toLowerCase() === "razorpay") {
+        await displayRazorpay();
+      }
+
+      if (cart.paymentMethod.toLowerCase() === "cod") {
+        res = await axiosInstance.post(`api/orders/orderCreate/cod`, options);
+
+        if (res.status === 200) {
+          history.push(`/order/${res.data?.data?._id}`);
+          toast.success("Order sucessfully placed");
+        } else {
+          toast.error("Order not placed");
+        }
+      
+      }
+    } catch (e) {
+      console.log(e);
+      toast.error("Order failed to place");
+    }
   };
 
   const SucessModal = () => {
@@ -210,7 +245,9 @@ const PlaceOrderScreen = ({ history }) => {
               <ListGroup.Item>
                 <h2>Payment Method</h2>
                 <strong>Method: </strong>
-                Razorpay
+                {cart?.paymentMethod === "cod"
+                  ? "Cash on Delivery"
+                  : "Razorpay"}
               </ListGroup.Item>
 
               <ListGroup.Item>
@@ -298,7 +335,7 @@ const PlaceOrderScreen = ({ history }) => {
                     type="button"
                     className="btn-block"
                     disabled={cart.cartItems === 0}
-                    onClick={displayRazorpay}
+                    onClick={handlePlaceOrder}
                   >
                     Place Order
                   </Button>

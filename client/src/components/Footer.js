@@ -53,21 +53,7 @@ const Footer = () => {
             </Link>
           </Col>
 
-          <Col md={2}>
-            <h3 className="pt-0">Pages</h3>
-            <Link to="/" className="d-block mb-3">
-              Near Restaurants
-            </Link>
-            <Link to="/" className="d-block mb-3">
-              Restaurant Details
-            </Link>
-            <Link to="/" className="d-block mb-3">
-              Available Regions
-            </Link>
-            <Link to="/" className="d-block mb-3">
-              Shipping Terms
-            </Link>
-          </Col>
+         
         </Row>
         <Row>
           <Col className="text-center pt-3 mt-5">

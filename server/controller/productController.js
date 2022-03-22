@@ -2,6 +2,7 @@ import asyncHandler from "express-async-handler";
 import Product from "../models/productModel.js";
 import mongoose from "mongoose";
 import fs from "fs";
+import cartModal from "../models/cartModal.js";
 //@desc       Fetch All products
 //@route      GET /api/products
 //@access     Public
@@ -153,9 +154,6 @@ const createProductReview = asyncHandler(async (req, res) => {
 });
 
 const createProducts = asyncHandler(async (req, res) => {
-  console.log(req.body);
-  console.log(req.files);
-  console.log(req.file);
   //image upload code
   const image = req.file.path;
   const product = new Product({
@@ -188,8 +186,9 @@ const getTopProducts = asyncHandler(async (req, res) => {
 });
 
 const getProductsByCategory = asyncHandler(async (req, res) => {
-
-  const products = await Product.find({ category: req.params.id }).populate("category");
+  const products = await Product.find({ category: req.params.id }).populate(
+    "category"
+  );
 
   if (products?.length > 0) {
     res.status(200).json({
@@ -203,6 +202,98 @@ const getProductsByCategory = asyncHandler(async (req, res) => {
   }
 });
 
+const AddtoCart = asyncHandler(async (req, res) => {
+  try {
+    const product = await cartModal.find({
+      product: req.body?.productId,
+      user: mongoose.Types.ObjectId(req.user._id),
+    });
+
+    if (product?.length === 0) {
+      const cart = new cartModal({
+        user: mongoose.Types.ObjectId(req.user._id),
+        product: mongoose.Types.ObjectId(req.body?.productId),
+        quantity: req.body?.quantity,
+      });
+      const createdCart = await cart.save();
+
+      const allCartItemsOfThatUSer = await cartModal
+        .find({
+          user: mongoose.Types.ObjectId(req.user._id),
+        })
+        .populate("product");
+      res.status(200).json({
+        data: allCartItemsOfThatUSer,
+        cartAdddedItem: createdCart,
+        message: "Product added to cart",
+      });
+    } else {
+      res.status(201).json({
+        message: "Product already in cart",
+      });
+    }
+  } catch (e) {
+    console.log(e);
+    res.status(404);
+    throw new Error("Something went wrong");
+  }
+});
+
+const updateCartItem = asyncHandler(async (req, res) => {
+  const cart = await cartModal.findById(req.body?.id);
+  if (cart) {
+    cart.quantity = req.body.quantity;
+    const updatedCart = await cart.save();
+    res.status(200).json({
+      data: updatedCart,
+      message: "Cart updated",
+    });
+  } else {
+    res.status(404);
+    throw new Error("Cart not found");
+  }
+});
+
+const deleteCartItem = asyncHandler(async (req, res) => {
+  const cart = await cartModal.findById(req.body?.id);
+  if (cart) {
+    await cart.remove();
+    res.status(200).json({
+      message: "Cart item deleted",
+    });
+  } else {
+    res.status(404);
+    throw new Error("Cart not found");
+  }
+});
+
+const getcartItems = asyncHandler(async (req, res) => {
+  try {
+    const cartItems = await cartModal
+      .find({
+        user: mongoose.Types.ObjectId(req.user._id),
+      })
+      .populate("product");
+
+    if (cartItems?.length > 0) {
+      res.status(200).json({
+        data: cartItems,
+
+        message: "Product added to cart",
+      });
+    } else {
+      res.status(201).json({
+        data: [],
+        message: "No products found",
+      });
+    }
+  } catch (e) {
+    console.log(e);
+    res.status(404);
+    throw new Error("Cart not found");
+  }
+});
+
 export {
   getProducts,
   getProductById,
@@ -213,4 +304,8 @@ export {
   getTopProducts,
   createProducts,
   getProductsByCategory,
+  AddtoCart,
+  updateCartItem,
+  deleteCartItem,
+  getcartItems,
 };

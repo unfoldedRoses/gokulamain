@@ -1,109 +1,127 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import { Button, Row, Col, ListGroup, Image, Card } from 'react-bootstrap'
-import { PayPalButton } from 'react-paypal-button-v2'
-import { Link } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import Message from '../components/Message'
-import Loader from '../components/Loader'
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Button, Row, Col, ListGroup, Image, Card } from "react-bootstrap";
+import { PayPalButton } from "react-paypal-button-v2";
+import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import Message from "../components/Message";
+import Loader from "../components/Loader";
 import {
   getOderDetails,
   payOrder,
   deliverOrder,
   pendingOrder,
-} from '../actions/orderActions'
+} from "../actions/orderActions";
 import {
   ORDER_PAY_RESET,
   ORDER_DELIVER_RESET,
   ORDER_PENDING_RESET,
-} from '../constants/orderConstants'
+} from "../constants/orderConstants";
+import axiosInstance from "../api/AxiosInstance";
 
 const OrderScreen = ({ match, history }) => {
-  const orderId = match.params.id
+  const orderId = match.params.id;
 
-  const [sdkReady, setSdkReady] = useState(false)
+  const [sdkReady, setSdkReady] = useState(false);
+const [LOAD,setLoad]=useState(false)
+  const dispatch = useDispatch();
 
-  const dispatch = useDispatch()
+  const orderDetails = useSelector((state) => state.orderDetails);
+  const { order, loading, error } = orderDetails;
 
-  const orderDetails = useSelector((state) => state.orderDetails)
-  const { order, loading, error } = orderDetails
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
 
-  const userLogin = useSelector((state) => state.userLogin)
-  const { userInfo } = userLogin
+  const orderPay = useSelector((state) => state.orderPay);
+  const { loading: loadingPay, success: successPay } = orderPay;
 
-  const orderPay = useSelector((state) => state.orderPay)
-  const { loading: loadingPay, success: successPay } = orderPay
+  const orderDeliver = useSelector((state) => state.orderDeliver);
+  const { loading: loadingDeliver, success: successDeliver } = orderDeliver;
 
-  const orderDeliver = useSelector((state) => state.orderDeliver)
-  const { loading: loadingDeliver, success: successDeliver } = orderDeliver
-
-  const orderPending = useSelector((state) => state.orderPending)
-  const { loading: loadingPending, success: successPending } = orderPending
+  const orderPending = useSelector((state) => state.orderPending);
+  const { loading: loadingPending, success: successPending } = orderPending;
 
   if (!loading) {
     //calculate price
     const addDecimals = (num) => {
-      return (Math.round(num * 100) / 100).toFixed(2)
-    }
+      return (Math.round(num * 100) / 100).toFixed(2);
+    };
     order.itemsPrice = addDecimals(
       order.orderItems.reduce((acc, item) => acc + item.price * item.qty, 0)
-    )
+    );
   }
 
   useEffect(() => {
-    window.scrollTo(0, 0)
+    window.scrollTo(0, 0);
     if (!userInfo) {
-      history.push('/login')
+      history.push("/login");
     }
     const addPayPalScript = async () => {
-      const { data: clientId } = await axios.get('/api/config/paypal')
-      const script = document.createElement('script')
-      script.type = 'text/javascript'
-      script.async = true
-      script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`
+      const { data: clientId } = await axios.get("/api/config/paypal");
+      const script = document.createElement("script");
+      script.type = "text/javascript";
+      script.async = true;
+      script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`;
       script.onload = () => {
-        setSdkReady(true)
-      }
+        setSdkReady(true);
+      };
 
-      document.body.appendChild(script)
-    }
+      document.body.appendChild(script);
+    };
 
     if (!order || successPay || successDeliver || order._id !== orderId) {
-      dispatch({ type: ORDER_PAY_RESET })
-      dispatch({ type: ORDER_DELIVER_RESET })
-      dispatch(getOderDetails(orderId))
+      dispatch({ type: ORDER_PAY_RESET });
+      dispatch({ type: ORDER_DELIVER_RESET });
+      dispatch(getOderDetails(orderId));
     } else if (!order.isPaid) {
       if (!window.paypal) {
-        addPayPalScript()
+        addPayPalScript();
       } else {
-        setSdkReady(true)
+        setSdkReady(true);
       }
     }
-  }, [dispatch, orderId, successPay, order, successDeliver, userInfo, history])
+  }, [dispatch, orderId, successPay, order, successDeliver, userInfo, history]);
 
   const successPaymentHandler = (paymentResult) => {
-    console.log(paymentResult)
+    console.log(paymentResult);
 
-    dispatch(payOrder(orderId, paymentResult))
-  }
+    dispatch(payOrder(orderId, paymentResult));
+  };
 
   const deliverHandler = () => {
-    dispatch(deliverOrder(order))
-  }
+    dispatch(deliverOrder(order));
+  };
 
   const pendingHandler = () => {
-    dispatch(pendingOrder(order))
-  }
+    dispatch(pendingOrder(order));
+  };
+
+  const getOrderDetails = async () => {
+    setLoad(true)
+    try {
+      
+      let res=await axiosInstance.get(`/api/orders/${orderId}`);
+      console.log(res);
+      setLoad(false)
+    } catch (err) {
+      setLoad(false)
+      console.log(err);
+    }
+  };
+
+  useEffect(()=>{
+    getOrderDetails()
+  },[])
 
   return loading ? (
     <Loader />
   ) : error ? (
-    <Message variant='danger'>{error}</Message>
+    <Message variant="danger">{error}</Message>
   ) : (
-    <div className='px-5 mx-5'>
+    <div className="px-md-5 mx-md-5">
       <Row>
         <Col md={8}>
-          <ListGroup variant='flush'>
+          <ListGroup variant="flush">
             <h1>Order id: {order._id}</h1>
             <ListGroup.Item>
               <h2>Shipping to</h2>
@@ -116,16 +134,16 @@ const OrderScreen = ({ match, history }) => {
 
               <p>
                 <strong>Address:</strong>
-                {order.shippingAddress.address}, {order.shippingAddress.city},{' '}
-                {order.shippingAddress.postalCode},{' '}
+                {order.shippingAddress.address}, {order.shippingAddress.city},{" "}
+                {order.shippingAddress.postalCode},{" "}
                 {order.shippingAddress.country}
               </p>
               {order.isDelivered ? (
-                <Message variant='success'>
+                <Message variant="success">
                   Delivered on {order.deliveredAt}
                 </Message>
               ) : (
-                <Message variant='danger'>Not Delivered</Message>
+                <Message variant="danger">Not Delivered</Message>
               )}
             </ListGroup.Item>
 
@@ -136,9 +154,9 @@ const OrderScreen = ({ match, history }) => {
                 {order.paymentMethod}
               </p>
               {order.isPaid ? (
-                <Message variant='success'>Paid on {order.paidAt}</Message>
+                <Message variant="success">Paid on {order.paidAt}</Message>
               ) : (
-                <Message variant='danger'>Not Paid</Message>
+                <Message variant="danger">Not Paid</Message>
               )}
             </ListGroup.Item>
 
@@ -147,7 +165,7 @@ const OrderScreen = ({ match, history }) => {
               {order.orderItems.length === 0 ? (
                 <Message> Order is empty</Message>
               ) : (
-                <ListGroup variant='flush'>
+                <ListGroup variant="flush">
                   {order.orderItems.map((item, idx) => (
                     <ListGroup.Item key={idx}>
                       <Row>
@@ -210,7 +228,7 @@ const OrderScreen = ({ match, history }) => {
                   <Col>${order.totalPrice}</Col>
                 </Row>
               </ListGroup.Item>
-              {!order.isPaid && (
+              {/* {!order.isPaid && (
                 <ListGroup.Item>
                   {loadingPay && <Loader />}
                   {!sdkReady ? (
@@ -222,7 +240,7 @@ const OrderScreen = ({ match, history }) => {
                     />
                   )}
                 </ListGroup.Item>
-              )}
+              )} */}
 
               {loadingDeliver && <Loader />}
               {userInfo &&
@@ -231,8 +249,8 @@ const OrderScreen = ({ match, history }) => {
                 !order.isDelivered && (
                   <ListGroup.Item>
                     <Button
-                      type='button'
-                      className='btn btn-block'
+                      type="button"
+                      className="btn btn-block"
                       onClick={deliverHandler}
                     >
                       Mark As Delivered
@@ -244,7 +262,7 @@ const OrderScreen = ({ match, history }) => {
         </Col>
       </Row>
     </div>
-  )
-}
+  );
+};
 
-export default OrderScreen
+export default OrderScreen;

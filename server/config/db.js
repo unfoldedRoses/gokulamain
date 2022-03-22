@@ -2,10 +2,12 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 dotenv.config();
 
+let url="mongodb+srv://praveendb009:worldatpeace123456@cluster0.skmqw.mongodb.net/gokuladb";
+let url2="mongodb://127.0.0.1:27017/mydb"
 const connectDB = async () => {
   try {
     const conn = await mongoose.connect(
-      "mongodb+srv://praveendb009:worldatpeace123456@cluster0.skmqw.mongodb.net/gokuladb",
+      url2,
       {
         useUnifiedTopology: true,
         useNewUrlParser: true,

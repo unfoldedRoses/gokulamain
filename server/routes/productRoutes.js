@@ -40,7 +40,7 @@ import {
   createProduct,
   createProducts,
   createProductReview,
-  getTopProducts,getProductsByCategory
+  getTopProducts,getProductsByCategory, AddtoCart, updateCartItem, deleteCartItem,getcartItems
 } from '../controller/productController.js'
 import { protect, admin } from '../middleware/authMiddleware.js'
 
@@ -55,5 +55,10 @@ router
   .put(protect, admin,upload.single('image'), updateProduct)
 
 router.get('/category/:id', getProductsByCategory)
+
+router.route("/addToCart").post(protect, AddtoCart)
+router.route("/getCart").post(protect, getcartItems)
+router.route("updateCart").post(protect, updateCartItem)
+router.route("/deleteCart").post(protect, deleteCartItem)
 
 export default router

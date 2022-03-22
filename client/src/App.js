@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import { Container } from "react-bootstrap";
@@ -33,9 +33,34 @@ import AdminCategoryLIst from "./screens/AdminCategoryLIst";
 import CategoryCreateScreen from "./screens/CategoryCreateScreen";
 import categoryProducts from "./screens/categoryProducts";
 import Terms from "./screens/Terms";
+import { useDispatch } from "react-redux";
+import axiosInstance from "./api/AxiosInstance";
+import { CART_ADD_ITEM } from "./constants/cartConstants";
 toast.configure();
 
 const App = () => {
+  const dispatch = useDispatch();
+  const getcartItems = async () => {
+    const res = await axiosInstance.post("/api/products/getCart");
+
+    if (res.status === 200) {
+      dispatch({
+        type: CART_ADD_ITEM,
+        payload: res?.data?.data,
+      });
+    } else {
+      dispatch({
+        type: CART_ADD_ITEM,
+        payload: [],
+      });
+    }
+
+    // history.push(`/cart/${match.params.id}?qty=${qty}`)
+  };
+
+  useEffect(() => {
+    getcartItems();
+  }, []);
   return (
     <AnimatePresence exitBeforeEnter>
       <ToastContainer />
@@ -73,7 +98,7 @@ const App = () => {
               component={categoryProducts}
               exact
             />
-             <Route
+            <Route
               path="/admin/category/create"
               component={CategoryCreateScreen}
               exact
