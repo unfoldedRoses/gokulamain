@@ -1,8 +1,8 @@
 //create a axios instance
 import axios from "axios";
 
- //export const baseURL = "https://gokulaorganicsmart.herokuapp.com";
-export const baseURL = "http://localhost:5000";
+ export const baseURL = "https://gokulaorganicsmart.herokuapp.com";
+//export const baseURL = "http://localhost:5000";
 
 let axiosInstance = axios.create({
   baseURL,

@@ -7,7 +7,7 @@ let url2="mongodb://127.0.0.1:27017/mydb"
 const connectDB = async () => {
   try {
     const conn = await mongoose.connect(
-      url2,
+      url,
       {
         useUnifiedTopology: true,
         useNewUrlParser: true,
