@@ -58,7 +58,7 @@ const ProfileScreen = ({ history }) => {
   }
 
   return (
-    <div className='px-5 mx-5'>
+    <div className='px-md-5 mx-md-5'>
       {userLoading || loading || loadingOrders ? (
         <Loader />
       ) : (

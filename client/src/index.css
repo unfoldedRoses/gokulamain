@@ -57,6 +57,7 @@ h3 {
 
 .custom-btn {
   padding: 15px 40px;
+  width: auto;
   background-color: #ff4555;
   color: #fff;
   font-size: 16px;

@@ -119,7 +119,7 @@ const ProductScreen = ({ match, history }) => {
   };
 
   return (
-    <motion.div className="mx-5 px-5" initial="initial" animate="animate">
+    <motion.div className="mx-md-5 px-md-5" initial="initial" animate="animate">
       {loading ? (
         <Loader />
       ) : error ? (
@@ -199,7 +199,7 @@ const ProductScreen = ({ match, history }) => {
                       <Row>
                         <Col>Price:</Col>
                         <Col>
-                          <strong>${product.price}</strong>
+                          <strong>₹{product.price}</strong>
                         </Col>
                       </Row>
                     </ListGroup.Item>

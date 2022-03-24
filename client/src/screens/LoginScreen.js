@@ -90,7 +90,7 @@ const LoginScreen = ({ location, history }) => {
                 variant='primary'
                 className='rounded login_btn'
                 disabled
-                style={{ width: '20%' }}
+               
               >
                 <Spinner size='sm' animation='border' />
               </Button>
@@ -100,7 +100,7 @@ const LoginScreen = ({ location, history }) => {
               type='submit'
               variant='primary'
               className='rounded login_btn'
-              style={{ width: '20%' }}
+             
             >
               Sign In
             </Button>

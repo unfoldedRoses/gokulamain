@@ -16,7 +16,7 @@ const Slogan = () => {
             successfully built a strong foothold in the export business of
             organic products.
           </p>
-          <Button className='btn custom-btn mt-3'>Ah! I want to order</Button>
+          <Button className='btn custom-btn mb-2 mt-3'>Ah! I want to order</Button>
         </Col>
         <Col md={7} className='text-right'>
           <Image src={sloganImg} alt='slogan' fluid />

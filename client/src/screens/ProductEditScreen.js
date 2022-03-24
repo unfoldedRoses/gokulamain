@@ -96,7 +96,7 @@ const ProductEditScreen = ({ match, history }) => {
   };
 
   return (
-    <div className="mx-5 px-5">
+    <div className="mx-md-5 px-md-5">
       <Link to="/admin/productlist" className="btn btn-dark my-3">
         <span>
           <Image src={leftArrow} fluid />

@@ -17,7 +17,7 @@ const HeroSection = () => {
             successfully built a strong foothold in the export business of
             organic products.
           </p>
-          <Button className="btn custom-btn">Find Products</Button>
+          <Button className="btn custom-btn mb-2">Find Products</Button>
         </Col>
 
         <Col md={6} className={styles.hero_bg}>

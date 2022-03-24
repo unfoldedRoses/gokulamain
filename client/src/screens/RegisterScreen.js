@@ -117,7 +117,7 @@ const RegisterScreen = ({ location, history }) => {
                 type='submit'
                 variant='primary'
                 disabled
-                style={{ width: '20%' }}
+               
                 className='rounded'
               >
                 <Spinner size='sm' animation='border' />
@@ -127,7 +127,7 @@ const RegisterScreen = ({ location, history }) => {
             <Button
               type='submit'
               variant='primary'
-              style={{ width: '20%' }}
+             
               className='rounded'
             >
               Sign Up
